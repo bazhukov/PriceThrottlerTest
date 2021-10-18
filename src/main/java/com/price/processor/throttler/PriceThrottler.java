@@ -68,7 +68,7 @@ public class PriceThrottler implements PriceProcessor, AutoCloseable {
             var pairPriceOptional = subscribers.get(processor).values().stream().sorted().findFirst();
             if(pairPriceOptional.isPresent()) {
                 var pairPrice = pairPriceOptional.get();
-                subscribers.get(processor).remove(pairPrice);
+                subscribers.get(processor).remove(pairPrice.getCcyPair());
                 Runnable runnableTask = () -> processor.onPrice(pairPrice.getCcyPair(), pairPrice.getRate());
                 task = CompletableFuture.runAsync(runnableTask, taskPool).whenCompleteAsync(
                         (input, exception) -> {
